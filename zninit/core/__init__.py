@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing
 import logging
 import typing
 from copy import deepcopy
@@ -143,9 +144,9 @@ def get_auto_init(  # noqa: C901
                 if kwarg_name not in priority_kwargs:
                     required_keys.append(kwarg_name)
 
-        init_kwargs.update({
-            name: kwargs.pop(name, value) for name, value in kwargs_with_default.items()
-        })
+        init_kwargs.update(
+            {name: kwargs.pop(name, value) for name, value in kwargs_with_default.items()}
+        )
         super_init(self, **kwargs)  # call the super_init explicitly instead of super
         # must call the super_init first e.g. it is required to set the node_name
 
@@ -258,6 +259,7 @@ def _get_auto_init_signature(cls) -> typing.Tuple[list, dict, list]:
     return signature_params
 
 
+@typing.dataclass_transform(field_specifiers=(Descriptor,))
 class ZnInit:  # pylint: disable=R0903
     """Parent class for automatic __init__ generation based on descriptors.
 
